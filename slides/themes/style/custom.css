@@ -1,0 +1,23 @@
+.deck-container {
+  font-size: 2.2em;
+}
+
+/*------------------------------------*\
+  Title
+\*------------------------------------*/
+
+h1 {
+  font-size: 3em;
+}
+
+h2.centered {
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+  left: 0;
+  right: 0;
+  text-align: center;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}

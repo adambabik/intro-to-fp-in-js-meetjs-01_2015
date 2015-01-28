@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=1024, user-scalable=no">
+
+  <title>Introduction To Functional Programming In JavaScript</title>
+
+  <!-- Required stylesheet -->
+  <link rel="stylesheet" media="screen" href="core/deck.core.css">
+
+  <!-- Extension CSS files go here. Remove or add as needed. -->
+  <link rel="stylesheet" media="screen" href="extensions/goto/deck.goto.css">
+  <link rel="stylesheet" media="screen" href="extensions/menu/deck.menu.css">
+  <link rel="stylesheet" media="screen" href="extensions/navigation/deck.navigation.css">
+  <link rel="stylesheet" media="screen" href="extensions/status/deck.status.css">
+  <link rel="stylesheet" media="screen" href="extensions/scale/deck.scale.css">
+  <link rel="stylesheet" media="screen" href="extensions/codemirror/codemirror.css">
+  <link rel="stylesheet" media="screen" href="extensions/codemirror/deck.codemirror.css">
+  <link rel="stylesheet" media="screen" href="extensions/codemirror/themes/cobalt.css">
+
+  <!-- Style theme. More available in /themes/style/ or create your own. -->
+  <link rel="stylesheet" media="screen" href="themes/style/swiss.css">
+  <link rel="stylesheet" media="screen" href="themes/style/custom.css">
+
+  <!-- Transition theme. More available in /themes/transition/ or create your own. -->
+  <link rel="stylesheet" media="screen" href="themes/transition/horizontal-slide.css">
+
+  <!-- Basic black and white print styles -->
+  <link rel="stylesheet" media="print" href="core/print.css">
+
+  <!-- Required Modernizr file -->
+  <script src="modernizr.custom.js"></script>
+</head>
+<body>
+  <div class="deck-container">
+
+    <!-- Begin slides. Just make elements with a class of slide. -->
+
+    <section class="slide">
+      <h1>Intro to<br>Functional Programming<br>in JavaScript</h1>
+    </section>
+
+    <section class="slide">
+      <h2>Motives</h2>
+
+      <ul>
+        <li>Easy mistakes as you specify <strong>how</strong> to do stuff instead of <strong>what</strong> to do</li>
+        <li>Imperative and OO programming tend to be difficult to analyze and refactor</li>
+        <li>Tangled control flow (objects soup)</li>
+        <li>JavaScript, as a language, is great to adapt FP techniques</li>
+        <li>Emerging libraries for functional programming, immutable data structures</li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2 class="centered">FP === no side effects<br></h2>
+    </section>
+
+    <section class="slide">
+      <h2>Example #1</h2>
+
+      <p>This is not functional in any way:</p>
+      <div>
+        <textarea id="code" name="code" class="code" mode="javascript" runnable="true">var x = 10;
+function addToX(val) {
+  x += val;
+}
+console.log(addToX(5), x);</textarea>
+      </div>
+      <p>&nbsp;</p>
+      <p>This is a pure function:</p>
+      <p>
+        <textarea id="code" name="code" class="code" mode="javascript" runnable="true">function add(x, val) {
+  return x + val;
+}
+console.log(add(10, 5));</textarea>
+      </p>
+    </section>
+
+    <section class="slide">
+      <h2 class="centered">Remove state wherever possible</h2>
+    </section>
+
+    <section class="slide">
+      <h2>Removing state</h2>
+
+      <p>This is a pure function! It has only an internal state. Still, it could be much better.</p>
+
+      <p>
+        <textarea id="code" name="code" class="code" mode="javascript" runnable="true">function countExpensiveProducts(products, price) {
+  var counter = 0;
+  var i = 0;
+  var product = null;
+
+  for (i = 0; i < products.length; i++) {
+    product = products[i];
+    if (product.price > price) {
+      counter += 1;
+    }
+  }
+
+  return counter;
+}
+
+countExpensiveProducts(products, 300);</textarea>
+      </p>
+    </section>
+
+    <section class="slide">
+      <h2>Removing state using Array.prototype.* methods</h2>
+
+      <p>Previous function without internal state.</p>
+
+      <p>
+        <textarea id="code" name="code" class="code" mode="javascript" runnable="true">function countExpensiveProducts(products, price) {
+  return products.reduce(
+    (sum, product) => sum + Number(product.price > price),
+    0
+  );
+}
+
+countExpensiveProducts(products, 300);</textarea>
+      </p>
+
+      <ul>
+        <li><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach">Array.prototype.forEach()</a></code></li>
+        <li><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter">Array.prototype.filter()</a></code></li>
+        <li><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every">Array.prototype.every()</a></code></li>
+        <li><code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some">Array.prototype.some()</a></code></li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2 class="centered">Parametrize all the things</h2>
+    </section>
+
+    <section class="slide">
+      <h2>Parametrize all the things</h2>
+
+      <p>
+        <textarea id="code" name="code" class="code" mode="javascript" runnable="true">function countItemsGreaterThan(items, getter, value) {
+  return items.reduce(
+    (sum, item) => sum + Number(getter(item) > value),
+    0
+  );
+}
+
+let price = product => product.price;
+
+countItemsGreaterThan(products, price, 300);</textarea>
+      </p>
+
+      <p>It's a pure, parametrized function. It's more generic. Still, there is still one drawback:</p>
+
+      <ul>
+        <li>Inconsistent API</li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2 class="centered">Using Ramda - a functional library</h2>
+    </section>
+
+    <section class="slide">
+      <h2>Previous function using Ramda</h2>
+
+      <p>
+        <textarea id="code" name="code" class="code" mode="javascript" runnable="true">// generic function
+function _countItemsGreaterThan(value, items) {
+  return R.foldl(
+    (acc, item) => acc + Number(item > value),
+    0,
+    items
+  );
+}
+
+let countItemsGreaterThan = R.curry(_countItemsGreaterThan);
+
+// specific functions
+let price = R.pluck('price');
+let countLargeItems = countItemsGreaterThan(500);
+let countExpensiveProducts = R.pipe(price, countLargeItems);
+
+countExpensiveProducts(products);</textarea>
+      </p>
+    </section>
+
+    <section class="slide">
+      <h2>Improvements</h2>
+
+      <ul>
+        <li>
+          Consistent and generic API - collections as the last argument<br>
+          <code>foldl :: (a,b → a) → a → [b] → a</code><br>
+          <code>pluck :: String → [*] → [*]</code>
+        </li>
+        <li>
+          Automatically curried functions<br>
+          <code>let price = R.pluck('price');</code>
+        </li>
+        <li>
+          Function composition<br>
+          <code>R.pipe(price, countLargeItems)</code>
+        </li>
+        <li>
+          Easy to refactor<br>
+          <code>
+            let discounted = R.filter(R.pluck('discounted'));<br>
+            let countExpensiveProducts = R.pipe(discounted, price, countLargeItems);
+          </code>
+        </li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2 class="centered">Promises are functional</h2>
+    </section>
+
+    <section class="slide">
+      <h2>Promises are functional</h2>
+
+      <p>Callback are imperative, because they mutate the external state.</p>
+      <p>
+        <textarea id="code" name="code" class="code" mode="javascript" runnable="true">httpGet('/products', callback);</textarea>
+      </p>
+
+      <p>Promises works with iteration functions.</p>
+      <p>
+        <textarea id="code" name="code" class="code" mode="javascript" runnable="true">let details = R.pipe(R.prop('id'), httpGetDetails);
+httpGet('/products')                     // async
+  .then(discounted)                      // sync
+  .then(R.map(details))                  // async
+  .then(R.pipe(price, countLargeItems)); // sync
+        </textarea>
+      </p>
+
+      <p>Or even better using <a href="http://ramdajs.com/docs/#pPipe"><code>pPipe()</code></a>.</p>
+
+      <p>
+        <textarea id="code" name="code" class="code" mode="javascript" runnable="true">let details = R.pipe(R.prop('id'), httpGetDetails);
+let countExpensiveProducts = R.pPipe(
+  httpGet,
+  discounted,
+  R.map(details),
+  price,
+  countLargeItems);
+countExpensiveProducts('/products').then(...);
+        </textarea>
+      </p>
+    </section>
+
+    <section class="slide">
+      <h2>Summary</h2>
+
+      <ul>
+        <li>FP is mainly about <strong>avoiding side effects</strong></li>
+        <li>Favour <strong>stateless</strong> approaches</li>
+        <li>Use <strong>currying</strong> and <strong>composition</strong></li>
+        <li>Treat <strong>functions like values</strong></li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2>What next?</h2>
+
+      <ul>
+        <li>Persistent data structures - mori, immutable.js</li>
+        <li>Functional reactive programming and streams - Bacon.js, Rx.js, Kefir.js</li>
+        <li>Functional languages compiled to JS - Elm, LiveScript, ClojureScript</li>
+        <li>Lazy evaluation - Lazy.js</li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2 class="centered">Q&amp;A</h2>
+    </section>
+
+    <section class="slide">
+      <h2>Reading</h2>
+
+      <ul>
+        <li><a href="http://scott.sauyet.com/Javascript/Talk/2014/01/FuncProgTalk/">Functional Programming by Scott Sauyet</a></li>
+        <li><a href="http://maryrosecook.com/blog/post/a-practical-introduction-to-functional-programming">A practical introduction to functional programming by Mary Rose Cook</a></li>
+        <li><a href="http://www.slideshare.net/ScottWlaschin/fp-patterns-buildstufflt">Functional Programming Patterns by Scott Wlaschin</a></li>
+      </ul>
+    </section>
+
+    <!-- End slides. -->
+
+    <!-- Begin extension snippets. Add or remove as needed. -->
+
+    <!-- deck.navigation snippet -->
+    <div aria-role="navigation">
+      <a href="#" class="deck-prev-link" title="Previous">&#8592;</a>
+      <a href="#" class="deck-next-link" title="Next">&#8594;</a>
+    </div>
+
+    <!-- deck.status snippet -->
+    <p class="deck-status" aria-role="status">
+      <span class="deck-status-current"></span>
+      /
+      <span class="deck-status-total"></span>
+    </p>
+
+    <!-- deck.goto snippet -->
+    <form action="." method="get" class="goto-form">
+      <label for="goto-slide">Go to slide:</label>
+      <input type="text" name="slidenum" id="goto-slide" list="goto-datalist">
+      <datalist id="goto-datalist"></datalist>
+      <input type="submit" value="Go">
+    </form>
+
+    <!-- End extension snippets. -->
+  </div>
+
+<!-- Required JS files. -->
+<script src="jquery.min.js"></script>
+<script src="core/deck.core.js"></script>
+
+<!-- Extension JS files. Add or remove as needed. -->
+<script src="extensions/menu/deck.menu.js"></script>
+<script src="extensions/goto/deck.goto.js"></script>
+<script src="extensions/status/deck.status.js"></script>
+<script src="extensions/navigation/deck.navigation.js"></script>
+<script src="extensions/scale/deck.scale.js"></script>
+<script src="extensions/codemirror/codemirror.js"></script>
+<script src="extensions/codemirror/mode/javascript/javascript.js"></script>
+<script src="extensions/codemirror/deck.codemirror.js"></script>
+
+<!-- Initialize the deck. You can put this in an external file if desired. -->
+<script>
+  $(function() {
+    $.deck('.slide');
+  });
+</script>
+</body>
+</html>
