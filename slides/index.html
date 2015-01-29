@@ -40,6 +40,11 @@
 
     <section class="slide">
       <h1>Intro to<br>Functional Programming<br>in JavaScript</h1>
+
+      <div class="bottom">
+        <p class="pull-left">Adam Babik | <a href="https://twitter.com/dreame4">@dreame4</a></p>
+        <p class="pull-right"><img src="images/logo_black.png" width="200"></p>
+      </div>
     </section>
 
     <section class="slide">
@@ -49,7 +54,7 @@
         <li>Easy mistakes as you specify <strong>how</strong> to do stuff instead of <strong>what</strong> to do</li>
         <li>Imperative and OO programming tend to be difficult to analyze and refactor</li>
         <li>Tangled control flow (objects soup)</li>
-        <li>JavaScript, as a language, is great to adapt FP techniques</li>
+        <li>JavaScript is great as a functional language</li>
         <li>Emerging libraries for functional programming, immutable data structures</li>
       </ul>
     </section>
@@ -193,8 +198,8 @@ countExpensiveProducts(products);</textarea>
       <ul>
         <li>
           Consistent and generic API - collections as the last argument<br>
-          <code>foldl :: (a,b → a) → a → [b] → a</code><br>
-          <code>pluck :: String → [*] → [*]</code>
+          <code>foldl(fn, acc, list)</code><br>
+          <code>pluck(key, list)</code>
         </li>
         <li>
           Automatically curried functions<br>
@@ -221,12 +226,12 @@ countExpensiveProducts(products);</textarea>
     <section class="slide">
       <h2>Promises are functional</h2>
 
-      <p>Callback are imperative, because they mutate the external state.</p>
+      <p>Callbacks are imperative, because they mutate the external state.</p>
       <p>
         <textarea id="code" name="code" class="code" mode="javascript" runnable="true">httpGet('/products', callback);</textarea>
       </p>
 
-      <p>Promises works with iteration functions.</p>
+      <p>Promises works with curried iteration functions.</p>
       <p>
         <textarea id="code" name="code" class="code" mode="javascript" runnable="true">let details = R.pipe(R.prop('id'), httpGetDetails);
 httpGet('/products')                     // async
@@ -255,8 +260,9 @@ countExpensiveProducts('/products').then(...);
       <h2>Summary</h2>
 
       <ul>
-        <li>FP is mainly about <strong>avoiding side effects</strong></li>
-        <li>Favour <strong>stateless</strong> approaches</li>
+        <li>FP is mainly about writing more <strong>declarative</strong> code</li>
+        <li>Avoiding <strong>side effects</strong></li>
+        <li>Favoring <strong>stateless</strong> approaches</li>
         <li>Use <strong>currying</strong> and <strong>composition</strong></li>
         <li>Treat <strong>functions like values</strong></li>
       </ul>
@@ -285,6 +291,32 @@ countExpensiveProducts('/products').then(...);
         <li><a href="http://maryrosecook.com/blog/post/a-practical-introduction-to-functional-programming">A practical introduction to functional programming by Mary Rose Cook</a></li>
         <li><a href="http://www.slideshare.net/ScottWlaschin/fp-patterns-buildstufflt">Functional Programming Patterns by Scott Wlaschin</a></li>
       </ul>
+    </section>
+
+    <section class="slide">
+      <h2>acodemy.io</h2>
+
+      <p>
+        <img src="images/acodemy.png" height="307" width="487">
+      </p>
+
+      <div class="text-center">
+        <p>AngularJS + WebComponents</p>
+        <p>18-21:00 27 lutego (piątek) i 10-18:00 28 lutego (sobota)</p>
+        <p>Zgłoszenia zbieramy do <strong>1 lutego</strong></p>
+      </div>
+
+      <h3 class="text-center"><a href="http://acodemy.io/">www.acodemy.io</a></h3>
+    </section>
+
+    <section class="slide">
+      <h2>10Clouds is hiring!</h2>
+
+      <h3 class="text-center"><a href="http://10clouds.workable.com/jobs/10885">More details!</a></h3>
+
+      <p>
+        <img src="images/hiring_js_10clouds.png">
+      </p>
     </section>
 
     <!-- End slides. -->
